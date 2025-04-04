@@ -6,23 +6,61 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>600</height>
+    <width>1159</width>
+    <height>569</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
-  <widget class="QWidget" name="centralwidget"/>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QTabWidget" name="tabWidget">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>1161</width>
+      <height>541</height>
+     </rect>
+    </property>
+    <property name="tabShape">
+     <enum>QTabWidget::TabShape::Rounded</enum>
+    </property>
+    <property name="currentIndex">
+     <number>0</number>
+    </property>
+    <widget class="QWidget" name="acquisition">
+     <attribute name="title">
+      <string>Data acquisition</string>
+     </attribute>
+    </widget>
+    <widget class="QWidget" name="visualization">
+     <attribute name="title">
+      <string>Visualization</string>
+     </attribute>
+    </widget>
+    <widget class="QWidget" name="prediction">
+     <attribute name="title">
+      <string>Prediction</string>
+     </attribute>
+    </widget>
+   </widget>
+  </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>800</width>
+     <width>1159</width>
      <height>21</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menuMyosense">
+    <property name="title">
+     <string>Myosense</string>
+    </property>
+   </widget>
+   <addaction name="menuMyosense"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
