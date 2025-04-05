@@ -2,6 +2,8 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QTimer>
+#include "qcustomplot.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -19,5 +21,11 @@ public:
 
 private:
     Ui::MainWindow *ui;
+    QCustomPlot *customplot;
+    QTimer *dataTimer;
+
+    void setupPlot();
+    void updatePlot();
+    double x = 0.0;
 };
 #endif // MAINWINDOW_H
