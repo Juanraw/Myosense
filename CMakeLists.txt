@@ -11,27 +11,31 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_AUTOUIC_SEARCH_PATHS
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/qcustomplot-source
     ${CMAKE_CURRENT_SOURCE_DIR}/front
+
 )
 
 
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets PrintSupport)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets PrintSupport)
 
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/libs/qcustomplot-source)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/libs/qcustomplot-source
+                    ${CMAKE_CURRENT_SOURCE_DIR}/libs/myosdk/include
+)
 
 set(PROJECT_SOURCES
         src/main.cpp
         src/mainwindow.cpp
         src/mainwindow.h
         front/mainwindow.ui
-	libs/qcustomplot-source/qcustomplot.cpp
-	libs/qcustomplot-source/qcustomplot.h
+        libs/qcustomplot-source/qcustomplot.cpp
+        libs/qcustomplot-source/qcustomplot.h
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(Myosense
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
+        src/myoread.hpp src/myoread.cpp
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET Myosense APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
