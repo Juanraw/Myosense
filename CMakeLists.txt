@@ -20,7 +20,10 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets PrintSupport)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/libs/qcustomplot-source
                     ${CMAKE_CURRENT_SOURCE_DIR}/libs/myosdk/include
+                   #${CMAKE_CURRENT_SOURCE_DIR}/libs/myosdk/lib
 )
+
+link_directories(${CMAKE_CURRENT_SOURCE_DIR}/libs/myosdk/lib)
 
 set(PROJECT_SOURCES
         src/main.cpp
@@ -58,6 +61,7 @@ endif()
 target_link_libraries(Myosense
     PRIVATE Qt${QT_VERSION_MAJOR}::Widgets
             Qt${QT_VERSION_MAJOR}::PrintSupport
+            myo64
 )
 
 
