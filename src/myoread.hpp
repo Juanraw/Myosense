@@ -20,6 +20,7 @@ public:
 signals:
 
     void emgDataReceived(quint64 timestamp, QVector<qint8> emg);
+    void finished();
 
 protected:
 

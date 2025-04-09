@@ -23,15 +23,17 @@ void MyoRead::run() {
     running = true;
     while(running) {
         hub->run(1000 / 50);
+        QThread::msleep(5);
     }
 
+    emit finished();
 }
 
 void MyoRead::stop() {
 
     running = false;
     //wait();
-    delete hub;
+    //delete hub;
 
 }
 
