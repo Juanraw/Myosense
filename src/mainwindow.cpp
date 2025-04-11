@@ -82,8 +82,37 @@ void MainWindow::onEmgDataReceived(qint64 timestamp, QVector<qint8> emg)
 }
 
 void MainWindow::onPoseReceived(qint64 timestamp, myo::Pose pose){
-    qDebug() << "Pose recibida en " << timestamp << ": " << QString::fromStdString(pose.toString());
-    this->pose = pose;
+
+    ui->RestLamp->setStyleSheet("background-color: red; border-radius: 10px; border: 1px solid black");
+    ui->FistLamp->setStyleSheet("background-color: red; border-radius: 10px; border: 1px solid black");
+    ui->SpreadLamp->setStyleSheet("background-color: red; border-radius: 10px; border: 1px solid black");
+    ui->WaveinLamp->setStyleSheet("background-color: red; border-radius: 10px; border: 1px solid black");
+    ui->WaveoutLamp->setStyleSheet("background-color: red; border-radius: 10px; border: 1px solid black");
+    ui->TapLamp->setStyleSheet("background-color: red; border-radius: 10px; border: 1px solid black");
+
+    switch (pose.type()) {
+    case myo::Pose::rest:
+        ui->RestLamp->setStyleSheet("background-color: green; border-radius: 10px; border: 1px solid black");
+        break;
+    case myo::Pose::fist:
+        ui->FistLamp->setStyleSheet("background-color: green; border-radius: 10px; border: 1px solid black");
+        break;
+    case myo::Pose::fingersSpread:
+        ui->SpreadLamp->setStyleSheet("background-color: green; border-radius: 10px; border: 1px solid black");
+        break;
+    case myo::Pose::waveIn:
+        ui->WaveinLamp->setStyleSheet("background-color: green; border-radius: 10px; border: 1px solid black");
+        break;
+    case myo::Pose::waveOut:
+        ui->WaveoutLamp->setStyleSheet("background-color: green; border-radius: 10px; border: 1px solid black");
+        break;
+    case myo::Pose::doubleTap:
+        ui->TapLamp->setStyleSheet("background-color: green; border-radius: 10px; border: 1px solid black");
+        break;
+    default:
+        break;
+    }
+
 }
 
 void MainWindow::setupPlot()
