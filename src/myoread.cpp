@@ -32,8 +32,6 @@ void MyoRead::run() {
 void MyoRead::stop() {
 
     running = false;
-    //wait();
-    //delete hub;
 
 }
 
@@ -44,5 +42,11 @@ void MyoRead::onEmgData(myo::Myo* myo, uint64_t timestamp, const int8_t* emg) {
         data[i] = emg[i];
     }
     emit emgDataReceived(static_cast<qint64>(timestamp), data);
+
+}
+
+void MyoRead::onPose(myo::Myo* myo, uint64_t timestamp, myo::Pose pose) {
+
+    emit poseReceived(static_cast<qint64>(timestamp), pose);
 
 }

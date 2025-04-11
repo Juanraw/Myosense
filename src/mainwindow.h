@@ -22,6 +22,7 @@ public:
 
 private slots:
     void onEmgDataReceived(qint64 timestamp, QVector<qint8> emg);
+    void onPoseReceived(qint64 timestamp, myo::Pose pose);
 
 private:
     Ui::MainWindow *ui;
@@ -38,6 +39,7 @@ private:
     QVector<double> emg6;
     QVector<double> emg7;
     QVector<double> emg8;
+    myo::Pose pose;
 
     void setupPlot();
     void updatePlot();

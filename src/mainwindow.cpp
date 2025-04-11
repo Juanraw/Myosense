@@ -11,6 +11,7 @@ MainWindow::MainWindow(QWidget *parent)
     , myoReader(new MyoRead())
 
 {
+
     ui->setupUi(this);
     setupPlot();
 
@@ -22,8 +23,11 @@ MainWindow::MainWindow(QWidget *parent)
     connect(this, &MainWindow::destroyed, myoReader, &MyoRead::stop);
 
     connect(myoReader, &MyoRead::emgDataReceived, this, &MainWindow::onEmgDataReceived);
+    connect(myoReader, &MyoRead::poseReceived, this, &MainWindow::onPoseReceived);
 
     connect(dataTimer, &QTimer::timeout, this, &MainWindow::updatePlot);
+
+
     dataTimer->start(50);
 
     myoThread->start();
@@ -77,6 +81,11 @@ void MainWindow::onEmgDataReceived(qint64 timestamp, QVector<qint8> emg)
 
 }
 
+void MainWindow::onPoseReceived(qint64 timestamp, myo::Pose pose){
+    qDebug() << "Pose recibida en " << timestamp << ": " << QString::fromStdString(pose.toString());
+    this->pose = pose;
+}
+
 void MainWindow::setupPlot()
 {
 
@@ -106,21 +115,6 @@ void MainWindow::setupPlot()
 void MainWindow::updatePlot()
 {
 
-    //static QVector<double> xData, yData, yData2, yData3, yData4, yData5, yData6, yData7 ;
-
-    //x += 0.05;
-    //xData.append(x);
-    //yData.append(std::sin(x * 2 * M_PI));
-    //yData2.append(std::sin(((x * 2)-1) * M_PI));
-    //yData3.append(std::sin(((x * 2)-1) * M_PI)*0.4);
-
-    //if (x > 10) {
-    //    xData.remove(0);
-    //    yData.remove(0);
-    //    yData2.remove(0);
-    //    yData3.remove(0);
-    //}
-
     ui->Realtimeplot->graph(0)->setData(Time,emg1);
     ui->Realtimeplot->graph(1)->setData(Time,emg2);
     ui->Realtimeplot->graph(2)->setData(Time,emg3);
@@ -133,3 +127,6 @@ void MainWindow::updatePlot()
     ui->Realtimeplot->replot();
 
 }
+
+
+

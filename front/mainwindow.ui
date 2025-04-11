@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1179</width>
-    <height>582</height>
+    <height>716</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -20,7 +20,7 @@
       <x>0</x>
       <y>0</y>
       <width>1181</width>
-      <height>561</height>
+      <height>691</height>
      </rect>
     </property>
     <property name="tabShape">
@@ -33,15 +33,79 @@
      <attribute name="title">
       <string>Data acquisition</string>
      </attribute>
-     <widget class="QCustomPlot" name="Realtimeplot" native="true">
+     <widget class="QGroupBox" name="groupBox">
       <property name="geometry">
        <rect>
-        <x>220</x>
-        <y>60</y>
-        <width>691</width>
-        <height>381</height>
+        <x>20</x>
+        <y>10</y>
+        <width>481</width>
+        <height>271</height>
        </rect>
       </property>
+      <property name="title">
+       <string>Real Time Graph</string>
+      </property>
+      <widget class="QCustomPlot" name="Realtimeplot" native="true">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>30</y>
+         <width>461</width>
+         <height>231</height>
+        </rect>
+       </property>
+      </widget>
+     </widget>
+     <widget class="QGroupBox" name="groupBox_2">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>290</y>
+        <width>191</width>
+        <height>361</height>
+       </rect>
+      </property>
+      <property name="title">
+       <string>Hand Pose</string>
+      </property>
+      <widget class="QWidget" name="verticalLayoutWidget">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>20</y>
+         <width>191</width>
+         <height>331</height>
+        </rect>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout_2">
+        <item>
+         <widget class="QLabel" name="label">
+          <property name="styleSheet">
+           <string notr="true">background-color: rgb(255, 0, 0);
+border-radius: 25px;
+border: 1px solid black;
+</string>
+          </property>
+          <property name="text">
+           <string>TextLabel</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="label_2">
+          <property name="styleSheet">
+           <string notr="true">background-color: rgb(255, 0, 0);
+border-radius: 25px;
+border: 1px solid black;
+</string>
+          </property>
+          <property name="text">
+           <string>TextLabel</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
      </widget>
     </widget>
     <widget class="QWidget" name="visualization">
@@ -82,6 +146,9 @@
    <container>1</container>
   </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>tabWidget</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

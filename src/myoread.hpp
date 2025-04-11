@@ -20,11 +20,13 @@ public:
 signals:
 
     void emgDataReceived(quint64 timestamp, QVector<qint8> emg);
+    void poseReceived(quint64 timestamp, myo::Pose pose);
     void finished();
 
 protected:
 
     void onEmgData(myo::Myo* myo, uint64_t timestamp, const int8_t* emg) override;
+    void onPose(myo::Myo* myo, uint64_t timestamp, myo::Pose pose) override;
 
 private:
     bool running;
