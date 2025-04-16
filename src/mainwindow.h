@@ -23,6 +23,12 @@ public:
 private slots:
     void onEmgDataReceived(qint64 timestamp, QVector<qint8> emg);
     void onPoseReceived(qint64 timestamp, myo::Pose pose);
+    void onLockReceived(qint64 timestamp, bool isUnlock);
+
+    void on_DataButton_clicked();
+
+protected:
+    void closeEvent(QCloseEvent *event) override;
 
 private:
     Ui::MainWindow *ui;
@@ -40,6 +46,10 @@ private:
     QVector<double> emg7;
     QVector<double> emg8;
     myo::Pose pose;
+    bool isUnlock;
+    bool ButtonValue = false;
+
+
 
     void setupPlot();
     void updatePlot();

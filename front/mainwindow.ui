@@ -291,6 +291,56 @@ border: 1px solid black;
        </property>
       </widget>
      </widget>
+     <widget class="QLabel" name="label_7">
+      <property name="geometry">
+       <rect>
+        <x>1030</x>
+        <y>340</y>
+        <width>101</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>15</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>Streaming</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="StreamingLamp">
+      <property name="geometry">
+       <rect>
+        <x>1130</x>
+        <y>350</y>
+        <width>25</width>
+        <height>25</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(255, 0, 0);
+border-radius: 10px;
+border: 1px solid black;
+</string>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="DataButton">
+      <property name="geometry">
+       <rect>
+        <x>870</x>
+        <y>340</y>
+        <width>101</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>PushButton</string>
+      </property>
+     </widget>
     </widget>
     <widget class="QWidget" name="visualization">
      <attribute name="title">

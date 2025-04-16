@@ -50,3 +50,35 @@ void MyoRead::onPose(myo::Myo* myo, uint64_t timestamp, myo::Pose pose) {
     emit poseReceived(static_cast<qint64>(timestamp), pose);
 
 }
+
+void MyoRead::onLock(myo::Myo* myo, uint64_t timestamp){
+
+    isUnlocked = false;
+
+    emit LockReceived(static_cast<qint64>(timestamp), isUnlocked);
+
+}
+
+void MyoRead::onUnlock(myo::Myo* myo, uint64_t timestamp){
+
+    isUnlocked = true;
+
+    emit LockReceived(static_cast<qint64>(timestamp), isUnlocked);
+
+}
+
+void MyoRead::setlock(){
+
+    if(myo){
+        myo->lock();
+    }
+
+}
+
+void MyoRead::setUnlock(myo::Myo::UnlockType type){
+
+    if(myo){
+        myo->unlock(type);
+    }
+
+}

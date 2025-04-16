@@ -2,6 +2,7 @@
 #include "./ui_mainwindow.h"
 #include "myoread.hpp"
 #include <cmath>
+#include <QCloseEvent>
 
 
 MainWindow::MainWindow(QWidget *parent)
@@ -24,6 +25,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(myoReader, &MyoRead::emgDataReceived, this, &MainWindow::onEmgDataReceived);
     connect(myoReader, &MyoRead::poseReceived, this, &MainWindow::onPoseReceived);
+    connect(myoReader, &MyoRead::LockReceived, this, &MainWindow::onLockReceived);
 
     connect(dataTimer, &QTimer::timeout, this, &MainWindow::updatePlot);
 
@@ -37,6 +39,15 @@ MainWindow::MainWindow(QWidget *parent)
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::closeEvent(QCloseEvent *event){
+
+    if(myoReader){
+        myoReader->setlock();
+    }
+
+    event->accept();
 }
 
 void MainWindow::onEmgDataReceived(qint64 timestamp, QVector<qint8> emg)
@@ -157,5 +168,31 @@ void MainWindow::updatePlot()
 
 }
 
+void MainWindow::onLockReceived(qint64 timestamp, bool isUnlock){
 
+
+    if(isUnlock){
+        ui->StreamingLamp->setStyleSheet("background-color: green");
+    } else {
+        ui->StreamingLamp->setStyleSheet("background-color: red");
+    }
+
+}
+
+void MainWindow::on_DataButton_clicked()
+{
+
+    if(ButtonValue){
+        myoReader->setlock();
+        ui->DataButton->setText("Start Data");
+        ui->DataButton->setStyleSheet("background-color: red");
+    } else {
+        myoReader->setUnlock(myo::Myo::unlockHold);
+        ui->DataButton->setText("Stop Data");
+        ui->DataButton->setStyleSheet("background-color: green");
+    }
+
+    ButtonValue = !ButtonValue;
+
+}
 
