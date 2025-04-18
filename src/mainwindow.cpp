@@ -186,13 +186,21 @@ void MainWindow::on_DataButton_clicked()
         myoReader->setlock();
         ui->DataButton->setText("Start Data");
         ui->DataButton->setStyleSheet("background-color: red");
+        dataTimer->stop();
     } else {
         myoReader->setUnlock(myo::Myo::unlockHold);
         ui->DataButton->setText("Stop Data");
         ui->DataButton->setStyleSheet("background-color: green");
+        dataTimer->start(50);
     }
 
     ButtonValue = !ButtonValue;
+
+}
+
+
+void MainWindow::on_SaveButton_clicked()
+{
 
 }
 
