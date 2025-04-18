@@ -294,7 +294,7 @@ border: 1px solid black;
      <widget class="QLabel" name="label_7">
       <property name="geometry">
        <rect>
-        <x>990</x>
+        <x>967</x>
         <y>340</y>
         <width>101</width>
         <height>31</height>
@@ -312,7 +312,7 @@ border: 1px solid black;
      <widget class="QLabel" name="StreamingLamp">
       <property name="geometry">
        <rect>
-        <x>1088</x>
+        <x>1065</x>
         <y>345</y>
         <width>25</width>
         <height>25</height>
@@ -331,7 +331,7 @@ border: 1px solid black;
      <widget class="QPushButton" name="DataButton">
       <property name="geometry">
        <rect>
-        <x>870</x>
+        <x>847</x>
         <y>340</y>
         <width>101</width>
         <height>31</height>
@@ -344,10 +344,10 @@ border: 1px solid black;
        <string>Data Start</string>
       </property>
      </widget>
-     <widget class="QRadioButton" name="radioButton">
+     <widget class="QRadioButton" name="FatigeButton">
       <property name="geometry">
        <rect>
-        <x>873</x>
+        <x>850</x>
         <y>400</y>
         <width>91</width>
         <height>22</height>

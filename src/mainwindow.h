@@ -24,8 +24,9 @@ private slots:
     void onEmgDataReceived(qint64 timestamp, QVector<qint8> emg);
     void onPoseReceived(qint64 timestamp, myo::Pose pose);
     void onLockReceived(qint64 timestamp, bool isUnlock);
-
+    void SaveData(const QString finalPath);
     void on_DataButton_clicked();
+    void on_SaveButton_clicked();
 
 protected:
     void closeEvent(QCloseEvent *event) override;
@@ -36,20 +37,14 @@ private:
     QTimer *dataTimer;
     MyoRead* myoReader;
 
-    QVector<double> Time;
-    QVector<double> emg1;
-    QVector<double> emg2;
-    QVector<double> emg3;
-    QVector<double> emg4;
-    QVector<double> emg5;
-    QVector<double> emg6;
-    QVector<double> emg7;
-    QVector<double> emg8;
+    QVector<double> Time, emg1, emg2, emg3, emg4, emg5, emg6, emg7, emg8;
+    QVector<double> TimeSave, emg1Save, emg2Save, emg3Save, emg4Save, emg5Save, emg6Save, emg7Save, emg8Save;
     myo::Pose pose;
     bool isUnlock;
     bool ButtonValue = false;
-
-
+    QString name;
+    QString lastName;
+    QString appPath = QCoreApplication::applicationDirPath();
 
     void setupPlot();
     void updatePlot();

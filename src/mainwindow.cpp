@@ -3,6 +3,9 @@
 #include "myoread.hpp"
 #include <cmath>
 #include <QCloseEvent>
+#include <QFile>
+#include <QTextStream>
+#include <QDir>
 
 
 MainWindow::MainWindow(QWidget *parent)
@@ -29,9 +32,6 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(dataTimer, &QTimer::timeout, this, &MainWindow::updatePlot);
 
-
-    dataTimer->start(50);
-
     myoThread->start();
 
 }
@@ -56,6 +56,7 @@ void MainWindow::onEmgDataReceived(qint64 timestamp, QVector<qint8> emg)
     x += 0.005;
 
     Time.append(x);
+    TimeSave.append(x);
 
     if(emg.size() >= 3) {
         emg1.append(emg[0] / 128.0);
@@ -66,6 +67,15 @@ void MainWindow::onEmgDataReceived(qint64 timestamp, QVector<qint8> emg)
         emg6.append(emg[5] / 128.0);
         emg7.append(emg[6] / 128.0);
         emg8.append(emg[7] / 128.0);
+
+        emg1Save.append(emg[0] / 128.0);
+        emg2Save.append(emg[1] / 128.0);
+        emg3Save.append(emg[2] / 128.0);
+        emg4Save.append(emg[3] / 128.0);
+        emg5Save.append(emg[4] / 128.0);
+        emg6Save.append(emg[5] / 128.0);
+        emg7Save.append(emg[6] / 128.0);
+        emg8Save.append(emg[7] / 128.0);
 
     } else {
         emg1.append(0);
@@ -170,11 +180,37 @@ void MainWindow::updatePlot()
 
 void MainWindow::onLockReceived(qint64 timestamp, bool isUnlock){
 
-
     if(isUnlock){
         ui->StreamingLamp->setStyleSheet("background-color: green");
     } else {
         ui->StreamingLamp->setStyleSheet("background-color: red");
+    }
+
+}
+
+void MainWindow::SaveData(const QString finalPath){
+
+    int Datasize = emg1Save.size();
+
+    QFile file(finalPath);
+    if (file.open(QIODevice::WriteOnly | QIODevice::Text)){
+        QTextStream out(&file);
+
+        for(int i = 0; i < Datasize; i++){
+            out <<emg1Save[i] << "\t"
+                <<emg2Save[i] << "\t"
+                <<emg3Save[i] << "\t"
+                <<emg4Save[i] << "\t"
+                <<emg5Save[i] << "\t"
+                <<emg6Save[i] << "\t"
+                <<emg7Save[i] << "\t"
+                <<emg8Save[i] << "\n";
+        }
+
+        file.close();
+        qDebug() << "Save Data into: " << finalPath;
+    } else {
+        qDebug() << "Could't Save The Data";
     }
 
 }
@@ -191,7 +227,9 @@ void MainWindow::on_DataButton_clicked()
         myoReader->setUnlock(myo::Myo::unlockHold);
         ui->DataButton->setText("Stop Data");
         ui->DataButton->setStyleSheet("background-color: green");
+        x = 0.0;
         dataTimer->start(50);
+
     }
 
     ButtonValue = !ButtonValue;
@@ -201,6 +239,19 @@ void MainWindow::on_DataButton_clicked()
 
 void MainWindow::on_SaveButton_clicked()
 {
+
+    QString basePath = appPath;
+    QString pathEmgTxt, pathTimeTxt;
+
+    if(ui->FatigeButton->isChecked()){
+        pathEmgTxt = basePath + "/Fatigue.txt";
+        pathTimeTxt = basePath + "Time-Fatigue.txt";
+    } else {
+        pathEmgTxt = basePath + "/No-Fatigue1.txt";
+        pathTimeTxt = basePath + "No-Time-Fatigue.txt";
+    }
+
+    SaveData(pathEmgTxt);
 
 }
 
