@@ -24,9 +24,11 @@ private slots:
     void onEmgDataReceived(qint64 timestamp, QVector<qint8> emg);
     void onPoseReceived(qint64 timestamp, myo::Pose pose);
     void onLockReceived(qint64 timestamp, bool isUnlock);
-    void SaveData(const QString finalPath);
+    void SaveData(const QString patientFolder);
     void on_DataButton_clicked();
     void on_SaveButton_clicked();
+
+    void on_ViewButton_clicked();
 
 protected:
     void closeEvent(QCloseEvent *event) override;

@@ -139,6 +139,7 @@ void MainWindow::onPoseReceived(qint64 timestamp, myo::Pose pose){
 void MainWindow::setupPlot()
 {
 
+    //Adquisition Graph
     ui->Realtimeplot->addGraph();
     ui->Realtimeplot->addGraph();
     ui->Realtimeplot->addGraph();
@@ -159,6 +160,55 @@ void MainWindow::setupPlot()
     ui->Realtimeplot->graph(5)->setPen(QPen(Qt::yellow));
     ui->Realtimeplot->graph(6)->setPen(QPen(Qt::magenta));
     ui->Realtimeplot->graph(7)->setPen(QPen(Qt::darkBlue));
+
+    //Visualization Grapjs
+    ui->EmgGraph1->addGraph();
+    ui->EmgGraph1->xAxis2->setLabel("EMG 1");
+    ui->EmgGraph1->xAxis->setLabel("Time");
+    ui->EmgGraph1->yAxis->setLabel("F(t)");
+    ui->EmgGraph1->graph(0)->setPen(QPen(Qt::blue));
+
+    ui->EmgGraph2->addGraph();
+    ui->EmgGraph2->xAxis2->setLabel("EMG 2");
+    ui->EmgGraph2->xAxis->setLabel("Time");
+    ui->EmgGraph2->yAxis->setLabel("F(t)");
+    ui->EmgGraph2->graph(0)->setPen(QPen(Qt::blue));
+
+    ui->EmgGraph3->addGraph();
+    ui->EmgGraph3->xAxis2->setLabel("EMG 3");
+    ui->EmgGraph3->xAxis->setLabel("Time");
+    ui->EmgGraph3->yAxis->setLabel("F(t)");
+    ui->EmgGraph3->graph(0)->setPen(QPen(Qt::blue));
+
+    ui->EmgGraph4->addGraph();
+    ui->EmgGraph4->xAxis2->setLabel("EMG 4");
+    ui->EmgGraph4->xAxis->setLabel("Time");
+    ui->EmgGraph4->yAxis->setLabel("F(t)");
+    ui->EmgGraph4->graph(0)->setPen(QPen(Qt::blue));
+
+    ui->EmgGraph5->addGraph();
+    ui->EmgGraph5->xAxis2->setLabel("EMG 5");
+    ui->EmgGraph5->xAxis->setLabel("Time");
+    ui->EmgGraph5->yAxis->setLabel("F(t)");
+    ui->EmgGraph5->graph(0)->setPen(QPen(Qt::blue));
+
+    ui->EmgGraph6->addGraph();
+    ui->EmgGraph6->xAxis2->setLabel("EMG 6");
+    ui->EmgGraph6->xAxis->setLabel("Time");
+    ui->EmgGraph6->yAxis->setLabel("F(t)");
+    ui->EmgGraph6->graph(0)->setPen(QPen(Qt::blue));
+
+    ui->EmgGraph7->addGraph();
+    ui->EmgGraph7->xAxis2->setLabel("EMG 7");
+    ui->EmgGraph7->xAxis->setLabel("Time");
+    ui->EmgGraph7->yAxis->setLabel("F(t)");
+    ui->EmgGraph7->graph(0)->setPen(QPen(Qt::blue));
+
+    ui->EmgGraph8->addGraph();
+    ui->EmgGraph8->xAxis2->setLabel("EMG 8");
+    ui->EmgGraph8->xAxis->setLabel("Time");
+    ui->EmgGraph8->yAxis->setLabel("F(t)");
+    ui->EmgGraph8->graph(0)->setPen(QPen(Qt::blue));
 
 }
 
@@ -188,11 +238,51 @@ void MainWindow::onLockReceived(qint64 timestamp, bool isUnlock){
 
 }
 
-void MainWindow::SaveData(const QString finalPath){
+void MainWindow::SaveData(const QString patientFolder){
 
     int Datasize = emg1Save.size();
 
-    QFile file(finalPath);
+    QString Name     = ui->NameLine->text();
+    QString LastName = ui->LastNLine->text();
+    QString Age      = ui->AgeLine->text();
+    QString Weight   = ui->WeigthLine->text();
+    QString Gender   = ui->GenderBox->currentText();
+    QString Date     = ui->DateEdit->text();
+    QString Frec     = ui->FrecBox->currentText();
+    QString pathEmgTxt, pathTimeTxt, pathGeneral;
+
+    if (ui->FatigeButton->isChecked()){
+        pathEmgTxt = patientFolder + "/" + "Fatigue.txt";
+        pathTimeTxt = patientFolder + "/" +  "Time-Fatigue.txt";
+    } else {
+        pathEmgTxt = patientFolder + "/" + "No-Fatigue.txt";
+        pathTimeTxt = patientFolder + "/" + "No-Time-Fatigue.txt";
+    }
+
+    pathGeneral = patientFolder + "/" + "General.txt";
+
+    QFile General(pathGeneral);
+    QFile file(pathEmgTxt);
+
+    if (!General.exists()){
+        if (General.open(QIODevice::WriteOnly | QIODevice::Text)){
+            QTextStream out(&General);
+
+            out << "Name: " << Name << "\n"
+                << "Last Name: " << LastName << "\n"
+                << "Age: " << Age << "\n"
+                << "Weigth: " << Weight << "\n"
+                << "Gender: " << Gender << "\n"
+                << "Date: " << Date << "\n"
+                << "Training Frecuency; " << Frec << "\n";
+
+            General.close();
+            qDebug() << "Save General Info into: " << patientFolder;
+        } else {
+            qDebug() << "Could't Save General Info";
+        }
+    }
+
     if (file.open(QIODevice::WriteOnly | QIODevice::Text)){
         QTextStream out(&file);
 
@@ -208,7 +298,7 @@ void MainWindow::SaveData(const QString finalPath){
         }
 
         file.close();
-        qDebug() << "Save Data into: " << finalPath;
+        qDebug() << "Save Data into: " << patientFolder;
     } else {
         qDebug() << "Could't Save The Data";
     }
@@ -218,7 +308,7 @@ void MainWindow::SaveData(const QString finalPath){
 void MainWindow::on_DataButton_clicked()
 {
 
-    if(ButtonValue){
+    if (ButtonValue){
         myoReader->setlock();
         ui->DataButton->setText("Start Data");
         ui->DataButton->setStyleSheet("background-color: red");
@@ -241,17 +331,59 @@ void MainWindow::on_SaveButton_clicked()
 {
 
     QString basePath = appPath;
-    QString pathEmgTxt, pathTimeTxt;
+    QString pathName = ui->NameLine->text();
+    QString pathLastN = ui->LastNLine->text();
+    QString FileName = pathLastN + "_" + pathName;
+    QString patientFolder = basePath + "/" + FileName;
 
-    if(ui->FatigeButton->isChecked()){
-        pathEmgTxt = basePath + "/Fatigue.txt";
-        pathTimeTxt = basePath + "Time-Fatigue.txt";
-    } else {
-        pathEmgTxt = basePath + "/No-Fatigue1.txt";
-        pathTimeTxt = basePath + "No-Time-Fatigue.txt";
+    QDir dir;
+    if (!dir.exists(patientFolder)) {
+        if (dir.mkpath(patientFolder)) {
+            qDebug() << "Created Folder:" << patientFolder;
+        } else {
+            qDebug() << "Error in the Folder Creation:" << patientFolder;
+        }
     }
 
-    SaveData(pathEmgTxt);
+    SaveData(patientFolder);
+
+}
+
+
+void MainWindow::on_ViewButton_clicked()
+{
+
+    ui->EmgGraph1->graph(0)->setData(TimeSave, emg1Save);
+    ui->EmgGraph1->yAxis->setRange(-1.2,1.2);
+    ui->EmgGraph1->replot();
+
+    ui->EmgGraph2->graph(0)->setData(TimeSave, emg2Save);
+    ui->EmgGraph2->yAxis->setRange(-1.2,1.2);
+    ui->EmgGraph2->replot();
+
+    ui->EmgGraph3->graph(0)->setData(TimeSave, emg3Save);
+    ui->EmgGraph3->yAxis->setRange(-1.2,1.2);
+    ui->EmgGraph3->replot();
+
+    ui->EmgGraph4->graph(0)->setData(TimeSave, emg4Save);
+    ui->EmgGraph4->yAxis->setRange(-1.2,1.2);
+    ui->EmgGraph4->replot();
+
+    ui->EmgGraph5->graph(0)->setData(TimeSave, emg5Save);
+    ui->EmgGraph5->yAxis->setRange(-1.2,1.2);
+    ui->EmgGraph5->replot();
+
+    ui->EmgGraph6->graph(0)->setData(TimeSave, emg6Save);
+    ui->EmgGraph6->yAxis->setRange(-1.2,1.2);
+    ui->EmgGraph6->replot();
+
+    ui->EmgGraph7->graph(0)->setData(TimeSave, emg7Save);
+    ui->EmgGraph7->yAxis->setRange(-1.2,1.2);
+    ui->EmgGraph7->replot();
+
+    ui->EmgGraph8->graph(0)->setData(TimeSave, emg8Save);
+    ui->EmgGraph8->yAxis->setRange(-1.2,1.2);
+    ui->EmgGraph8->replot();
 
 }
 

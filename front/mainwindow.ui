@@ -362,7 +362,7 @@ border: 1px solid black;
        <string>Fatigue</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="lineEdit">
+     <widget class="QLineEdit" name="NameLine">
       <property name="geometry">
        <rect>
         <x>879</x>
@@ -390,7 +390,7 @@ border: 1px solid black;
        <string>Name</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="lineEdit_2">
+     <widget class="QLineEdit" name="LastNLine">
       <property name="geometry">
        <rect>
         <x>879</x>
@@ -418,7 +418,7 @@ border: 1px solid black;
        <string>Last Name</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="lineEdit_3">
+     <widget class="QLineEdit" name="AgeLine">
       <property name="geometry">
        <rect>
         <x>879</x>
@@ -482,7 +482,7 @@ border: 1px solid black;
        <string>Weigth</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="lineEdit_4">
+     <widget class="QLineEdit" name="WeigthLine">
       <property name="geometry">
        <rect>
         <x>879</x>
@@ -492,7 +492,7 @@ border: 1px solid black;
        </rect>
       </property>
      </widget>
-     <widget class="QComboBox" name="comboBox">
+     <widget class="QComboBox" name="GenderBox">
       <property name="geometry">
        <rect>
         <x>880</x>
@@ -501,8 +501,18 @@ border: 1px solid black;
         <height>24</height>
        </rect>
       </property>
+      <item>
+       <property name="text">
+        <string>Male</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Female</string>
+       </property>
+      </item>
      </widget>
-     <widget class="QDateEdit" name="dateEdit">
+     <widget class="QDateEdit" name="DateEdit">
       <property name="geometry">
        <rect>
         <x>998</x>
@@ -548,7 +558,7 @@ border: 1px solid black;
        <string>Training Frecuency</string>
       </property>
      </widget>
-     <widget class="QComboBox" name="comboBox_2">
+     <widget class="QComboBox" name="FrecBox">
       <property name="geometry">
        <rect>
         <x>1000</x>
@@ -557,6 +567,21 @@ border: 1px solid black;
         <height>24</height>
        </rect>
       </property>
+      <item>
+       <property name="text">
+        <string>2 Times a week</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>3-5 Times a week</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>More than 5 times a week</string>
+       </property>
+      </item>
      </widget>
      <widget class="QPushButton" name="SaveButton">
       <property name="geometry">
@@ -579,6 +604,230 @@ border: 1px solid black;
      <attribute name="title">
       <string>Visualization</string>
      </attribute>
+     <widget class="QPushButton" name="ViewButton">
+      <property name="geometry">
+       <rect>
+        <x>790</x>
+        <y>460</y>
+        <width>111</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
+      <property name="text">
+       <string>View</string>
+      </property>
+     </widget>
+     <widget class="QCustomPlot" name="EmgGraph1" native="true">
+      <property name="geometry">
+       <rect>
+        <x>30</x>
+        <y>30</y>
+        <width>331</width>
+        <height>151</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(138, 138, 138);</string>
+      </property>
+     </widget>
+     <widget class="QCustomPlot" name="EmgGraph4" native="true">
+      <property name="geometry">
+       <rect>
+        <x>30</x>
+        <y>240</y>
+        <width>331</width>
+        <height>151</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(138, 138, 138);</string>
+      </property>
+     </widget>
+     <widget class="QCustomPlot" name="EmgGraph2" native="true">
+      <property name="geometry">
+       <rect>
+        <x>410</x>
+        <y>30</y>
+        <width>331</width>
+        <height>151</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(138, 138, 138);</string>
+      </property>
+     </widget>
+     <widget class="QCustomPlot" name="EmgGraph5" native="true">
+      <property name="geometry">
+       <rect>
+        <x>410</x>
+        <y>240</y>
+        <width>331</width>
+        <height>151</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(138, 138, 138);</string>
+      </property>
+     </widget>
+     <widget class="QCustomPlot" name="EmgGraph7" native="true">
+      <property name="geometry">
+       <rect>
+        <x>30</x>
+        <y>450</y>
+        <width>331</width>
+        <height>151</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(138, 138, 138);</string>
+      </property>
+     </widget>
+     <widget class="QCustomPlot" name="EmgGraph8" native="true">
+      <property name="geometry">
+       <rect>
+        <x>410</x>
+        <y>450</y>
+        <width>331</width>
+        <height>151</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(138, 138, 138);</string>
+      </property>
+     </widget>
+     <widget class="QCustomPlot" name="EmgGraph6" native="true">
+      <property name="geometry">
+       <rect>
+        <x>790</x>
+        <y>240</y>
+        <width>331</width>
+        <height>151</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(138, 138, 138);</string>
+      </property>
+     </widget>
+     <widget class="QCustomPlot" name="EmgGraph3" native="true">
+      <property name="geometry">
+       <rect>
+        <x>790</x>
+        <y>30</y>
+        <width>331</width>
+        <height>151</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(138, 138, 138);</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_15">
+      <property name="geometry">
+       <rect>
+        <x>180</x>
+        <y>10</y>
+        <width>49</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>EMG 1</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_16">
+      <property name="geometry">
+       <rect>
+        <x>560</x>
+        <y>10</y>
+        <width>49</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>EMG 2</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_17">
+      <property name="geometry">
+       <rect>
+        <x>950</x>
+        <y>10</y>
+        <width>49</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>EMG 3</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_18">
+      <property name="geometry">
+       <rect>
+        <x>170</x>
+        <y>220</y>
+        <width>49</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>EMG 4</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_19">
+      <property name="geometry">
+       <rect>
+        <x>560</x>
+        <y>220</y>
+        <width>49</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>EMG 5</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_20">
+      <property name="geometry">
+       <rect>
+        <x>950</x>
+        <y>220</y>
+        <width>49</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>EMG 6</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_21">
+      <property name="geometry">
+       <rect>
+        <x>150</x>
+        <y>430</y>
+        <width>49</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>EMG 7</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_22">
+      <property name="geometry">
+       <rect>
+        <x>560</x>
+        <y>430</y>
+        <width>49</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>EMG 8</string>
+      </property>
+     </widget>
     </widget>
     <widget class="QWidget" name="prediction">
      <attribute name="title">
