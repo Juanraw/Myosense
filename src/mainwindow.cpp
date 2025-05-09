@@ -1,3 +1,4 @@
+#define NOMINMAX
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
 #include "myoread.hpp"
@@ -6,6 +7,8 @@
 #include <QFile>
 #include <QTextStream>
 #include <QDir>
+#include <QtMath>
+#include <algorithm>
 
 
 MainWindow::MainWindow(QWidget *parent)
@@ -287,14 +290,14 @@ void MainWindow::SaveData(const QString patientFolder){
         QTextStream out(&file);
 
         for(int i = 0; i < Datasize; i++){
-            out <<emg1Save[i] << "\t"
-                <<emg2Save[i] << "\t"
-                <<emg3Save[i] << "\t"
-                <<emg4Save[i] << "\t"
-                <<emg5Save[i] << "\t"
-                <<emg6Save[i] << "\t"
-                <<emg7Save[i] << "\t"
-                <<emg8Save[i] << "\n";
+            out << emg1Save[i] << "\t"
+                << emg2Save[i] << "\t"
+                << emg3Save[i] << "\t"
+                << emg4Save[i] << "\t"
+                << emg5Save[i] << "\t"
+                << emg6Save[i] << "\t"
+                << emg7Save[i] << "\t"
+                << emg8Save[i] << "\n";
         }
 
         file.close();
@@ -302,6 +305,121 @@ void MainWindow::SaveData(const QString patientFolder){
     } else {
         qDebug() << "Could't Save The Data";
     }
+
+}
+
+double MainWindow::Entropy(const QVector<double>& signal)
+{
+
+    const int numBins = 256;
+
+    if(signal.isEmpty()) return 0.0;
+
+    double minVal = *std::min_element(signal.begin(), signal.end());
+    double maxVal = *std::max_element(signal.begin(), signal.end());
+
+    if(qFuzzyCompare(minVal, maxVal)){
+        return 0.0;
+    }
+
+    QVector<int> hist(numBins,0);
+    double binWith = (maxVal - minVal) / numBins;
+
+    for (double value : signal){
+        int binIndex = static_cast<int>((value - minVal) / binWith);
+        if (binIndex == numBins) binIndex = numBins - 1;
+        hist[binIndex]++;
+    }
+
+    double Shannon = 0.0;
+    int totalSamples = signal.size();
+
+    for (int count : hist){
+        if (count > 0){
+            double p = static_cast<double>(count) / totalSamples;
+            Shannon += p * (qLn(p) /qLn(2));
+        }
+    }
+
+    return -Shannon;
+
+}
+
+double MainWindow::dEntropy(const QVector<double>& entropy){
+
+    if(entropy.isEmpty()) return 0.0;
+
+    return (entropy[0] - (entropy[entropy.size() - 1])) / W;
+
+}
+
+double MainWindow::MeanAbsoluteValue(const QVector<double>& signal){
+
+    if(signal.isEmpty()) return 0.0;
+
+    double sumAbs = 0.0;
+
+    for(double value : signal){
+        sumAbs += qAbs(value);
+    }
+
+    return sumAbs / signal.size();
+
+}
+
+double MainWindow::RootMeanSquare(const QVector<double>& signal){
+
+    if(signal.isEmpty()) return 0.0;
+
+    double sumSquares = 0.0;
+
+    for (double value : signal){
+        sumSquares += value * value;
+    }
+
+    return qSqrt(sumSquares / signal.size());
+
+}
+
+double MainWindow::Variance(const QVector<double>& signal){
+
+    if (signal.size() < 2) return 0.0;
+
+    double mean = 0.0;
+    for (double value : signal){
+        mean += value;
+    }
+    mean /= signal.size();
+
+    double sumSquiereDiff = 0.0;
+    for (double value : signal){
+        double diff = value - mean;
+        sumSquiereDiff += diff * diff;
+    }
+
+    return sumSquiereDiff / (signal.size() - 1);
+
+}
+
+Features MainWindow::DataProcessing(const QVector<double>& signal)
+{
+
+    Features result;
+
+    int signalLength = signal.size();
+    QVector<double> subSignal;
+
+    for (int i = 0; i <= signalLength; i++){
+        subSignal = signal.mid(i,W);
+
+        result.h.append(Entropy(subSignal));
+        result.dh.append(dEntropy(result.h));
+        result.mav.append(MeanAbsoluteValue(subSignal));
+        result.rms.append(RootMeanSquare(subSignal));
+        result.var.append(Variance(subSignal));
+    }
+
+    return result;
 
 }
 
@@ -334,7 +452,8 @@ void MainWindow::on_SaveButton_clicked()
     QString pathName = ui->NameLine->text();
     QString pathLastN = ui->LastNLine->text();
     QString FileName = pathLastN + "_" + pathName;
-    QString patientFolder = basePath + "/" + FileName;
+
+    patientFolder = basePath + "/" + FileName;
 
     QDir dir;
     if (!dir.exists(patientFolder)) {
@@ -384,6 +503,110 @@ void MainWindow::on_ViewButton_clicked()
     ui->EmgGraph8->graph(0)->setData(TimeSave, emg8Save);
     ui->EmgGraph8->yAxis->setRange(-1.2,1.2);
     ui->EmgGraph8->replot();
+
+}
+
+
+void MainWindow::on_ProcessButton_clicked()
+{
+
+    QString HFile = patientFolder + "/" + "Hfile.txt";
+    QString dHFile = patientFolder + "/" + "dHfile.txt";
+    QString RMSFile = patientFolder + "/" + "RMSfile.txt";
+    QString MAVFile = patientFolder + "/" + "MAVfile.txt";
+    QString VARFile = patientFolder + "/" + "VARfile.txt";
+
+    QFile fileH(HFile);
+    QFile filedH(dHFile);
+    QFile fileRMS(RMSFile);
+    QFile fileMAV(MAVFile);
+    QFile fileVAR(VARFile);
+
+    Features features1 = DataProcessing(emg1Save);
+    Features features2 = DataProcessing(emg2Save);
+    Features features3 = DataProcessing(emg3Save);
+    Features features4 = DataProcessing(emg4Save);
+    Features features5 = DataProcessing(emg5Save);
+    Features features6 = DataProcessing(emg6Save);
+    Features features7 = DataProcessing(emg7Save);
+    Features features8 = DataProcessing(emg8Save);
+
+    H1 = features1.h;
+    dH1 = features1.dh;
+    MAV1 = features1.mav;
+    RMS1 = features1.rms;
+    VAR1 = features1.var;
+
+    H2 = features2.h;
+    dH2 = features2.dh;
+    MAV2 = features2.mav;
+    RMS2 = features2.rms;
+    VAR2 = features2.var;
+
+    H3 = features3.h;
+    dH3 = features3.dh;
+    MAV3 = features3.mav;
+    RMS3 = features3.rms;
+    VAR3 = features3.var;
+
+    H4 = features4.h;
+    dH4 = features4.dh;
+    MAV4 = features4.mav;
+    RMS4 = features4.rms;
+    VAR4 = features4.var;
+
+    H5 = features5.h;
+    dH5 = features5.dh;
+    MAV5 = features5.mav;
+    RMS5 = features5.rms;
+    VAR5 = features5.var;
+
+    H6 = features6.h;
+    dH6 = features6.dh;
+    MAV6 = features6.mav;
+    RMS6 = features6.rms;
+    VAR6 = features6.var;
+
+    H7 = features7.h;
+    dH7 = features7.dh;
+    MAV7 = features7.mav;
+    RMS7 = features7.rms;
+    VAR7 = features7.var;
+
+    H8 = features8.h;
+    dH8 = features8.dh;
+    MAV8 = features8.mav;
+    RMS8 = features8.rms;
+    VAR8 = features8.var;
+
+    int Datasize = H1.size();
+
+    if (Datasize == 0) {
+        QMessageBox::warning(this, "Error", "Los vectores de características están vacíos.");
+        return;
+    }
+
+    if (fileH.open(QIODevice::WriteOnly | QIODevice::Text)){
+        QTextStream out(&fileH);
+
+        for (int i = 0; i < Datasize; i++){
+            out << H1[i] << "\t"
+                << H2[i] << "\t"
+                << H3[i] << "\t"
+                << H4[i] << "\t"
+                << H5[i] << "\t"
+                << H6[i] << "\t"
+                << H7[i] << "\t"
+                << H8[i] << "\n";
+        }
+
+        fileH.close();
+        qDebug() << "Save H Data into: " << patientFolder;
+
+    } else {
+        qDebug() << "Could't Save The H Data";
+    }
+
 
 }
 

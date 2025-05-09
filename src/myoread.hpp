@@ -19,7 +19,6 @@ public:
     void setlock();
     void setUnlock(myo::Myo::UnlockType type);
 
-
 signals:
 
     void emgDataReceived(quint64 timestamp, QVector<qint8> emg);

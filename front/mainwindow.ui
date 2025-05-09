@@ -27,7 +27,7 @@
      <enum>QTabWidget::TabShape::Rounded</enum>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>2</number>
     </property>
     <widget class="QWidget" name="acquisition">
      <attribute name="title">
@@ -833,6 +833,22 @@ border: 1px solid black;
      <attribute name="title">
       <string>Prediction</string>
      </attribute>
+     <widget class="QPushButton" name="ProcessButton">
+      <property name="geometry">
+       <rect>
+        <x>790</x>
+        <y>400</y>
+        <width>111</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
+      <property name="text">
+       <string>Process</string>
+      </property>
+     </widget>
     </widget>
    </widget>
   </widget>
