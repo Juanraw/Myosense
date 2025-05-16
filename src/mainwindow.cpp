@@ -2,6 +2,7 @@
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
 #include "myoread.hpp"
+#include "classifier.h"
 #include <cmath>
 #include <QCloseEvent>
 #include <QFile>
@@ -16,6 +17,7 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
     , dataTimer(new QTimer(this))
     , myoReader(new MyoRead())
+    , classifier(new Classifier())
 
 {
 
@@ -408,6 +410,7 @@ Features MainWindow::DataProcessing(const QVector<double>& signal)
 
     int signalLength = signal.size();
     QVector<double> subSignal;
+    QVector<double> row;
 
     for (int i = 0; i <= signalLength; i++){
         subSignal = signal.mid(i,W);
@@ -417,6 +420,32 @@ Features MainWindow::DataProcessing(const QVector<double>& signal)
         result.mav.append(MeanAbsoluteValue(subSignal));
         result.rms.append(RootMeanSquare(subSignal));
         result.var.append(Variance(subSignal));
+    }
+
+    auto normalize = [](QVector<double>& feature) {
+        if (feature.isEmpty()) return;
+
+        double minVal = *std::min_element(feature.constBegin(), feature.constEnd());
+        double maxVal = *std::max_element(feature.constBegin(), feature.constEnd());
+        double range = maxVal - minVal;
+        if (qFuzzyIsNull(range)) range = 1.0; // evitar división por cero
+
+        for (int i = 0; i < feature.size(); ++i) {
+            feature[i] = (feature[i] - minVal) / range;
+        }
+    };
+
+    normalize(result.h);
+    normalize(result.dh);
+    normalize(result.rms);
+    normalize(result.mav);
+    normalize(result.var);
+
+    for (int i = 0; i <= signalLength; i++){
+        row = {result.h[i], result.dh[i], result.rms[i], result.mav[i], result.var[i]};
+        //row = {result.dh[i], result.rms[i], result.mav[i], result.var[i]};
+
+        result.pred.append(classifier->predict(row));
     }
 
     return result;
@@ -515,12 +544,14 @@ void MainWindow::on_ProcessButton_clicked()
     QString RMSFile = patientFolder + "/" + "RMSfile.txt";
     QString MAVFile = patientFolder + "/" + "MAVfile.txt";
     QString VARFile = patientFolder + "/" + "VARfile.txt";
+    QString PredFile = patientFolder + "/" + "PREDICTIONfile.txt";
 
     QFile fileH(HFile);
     QFile filedH(dHFile);
     QFile fileRMS(RMSFile);
     QFile fileMAV(MAVFile);
     QFile fileVAR(VARFile);
+    QFile filePred(PredFile);
 
     Features features1 = DataProcessing(emg1Save);
     Features features2 = DataProcessing(emg2Save);
@@ -536,48 +567,56 @@ void MainWindow::on_ProcessButton_clicked()
     MAV1 = features1.mav;
     RMS1 = features1.rms;
     VAR1 = features1.var;
+    Pred1 = features1.pred;
 
     H2 = features2.h;
     dH2 = features2.dh;
     MAV2 = features2.mav;
     RMS2 = features2.rms;
     VAR2 = features2.var;
+    Pred2 = features2.pred;
 
     H3 = features3.h;
     dH3 = features3.dh;
     MAV3 = features3.mav;
     RMS3 = features3.rms;
     VAR3 = features3.var;
+    Pred3 = features3.pred;
 
     H4 = features4.h;
     dH4 = features4.dh;
     MAV4 = features4.mav;
     RMS4 = features4.rms;
     VAR4 = features4.var;
+    Pred4 = features4.pred;
 
     H5 = features5.h;
     dH5 = features5.dh;
     MAV5 = features5.mav;
     RMS5 = features5.rms;
     VAR5 = features5.var;
+    Pred5 = features5.pred;
 
     H6 = features6.h;
     dH6 = features6.dh;
     MAV6 = features6.mav;
     RMS6 = features6.rms;
     VAR6 = features6.var;
+    Pred6 = features6.pred;
 
     H7 = features7.h;
     dH7 = features7.dh;
     MAV7 = features7.mav;
     RMS7 = features7.rms;
     VAR7 = features7.var;
+    Pred7 = features7.pred;
 
     H8 = features8.h;
     dH8 = features8.dh;
     MAV8 = features8.mav;
     RMS8 = features8.rms;
     VAR8 = features8.var;
+    Pred8 = features8.pred;
 
     int Datasize = H1.size();
 
@@ -605,6 +644,111 @@ void MainWindow::on_ProcessButton_clicked()
 
     } else {
         qDebug() << "Could't Save The H Data";
+    }
+
+    if (filedH.open(QIODevice::WriteOnly | QIODevice::Text)){
+        QTextStream out(&filedH);
+
+        for (int i = 0; i < Datasize; i++){
+            out << dH1[i] << "\t"
+                << dH2[i] << "\t"
+                << dH3[i] << "\t"
+                << dH4[i] << "\t"
+                << dH5[i] << "\t"
+                << dH6[i] << "\t"
+                << dH7[i] << "\t"
+                << dH8[i] << "\n";
+        }
+
+        fileH.close();
+        qDebug() << "Save dH Data into: " << patientFolder;
+
+    } else {
+        qDebug() << "Could't Save The dH Data";
+    }
+
+    if (fileMAV.open(QIODevice::WriteOnly | QIODevice::Text)){
+        QTextStream out(&fileMAV);
+
+        for (int i = 0; i < Datasize; i++){
+            out << MAV1[i] << "\t"
+                << MAV2[i] << "\t"
+                << MAV3[i] << "\t"
+                << MAV4[i] << "\t"
+                << MAV5[i] << "\t"
+                << MAV6[i] << "\t"
+                << MAV7[i] << "\t"
+                << MAV8[i] << "\n";
+        }
+
+        fileH.close();
+        qDebug() << "Save MAV Data into: " << patientFolder;
+
+    } else {
+        qDebug() << "Could't Save The MAV Data";
+    }
+
+    if (fileRMS.open(QIODevice::WriteOnly | QIODevice::Text)){
+        QTextStream out(&fileRMS);
+
+        for (int i = 0; i < Datasize; i++){
+            out << RMS1[i] << "\t"
+                << RMS2[i] << "\t"
+                << RMS3[i] << "\t"
+                << RMS4[i] << "\t"
+                << RMS5[i] << "\t"
+                << RMS6[i] << "\t"
+                << RMS7[i] << "\t"
+                << RMS8[i] << "\n";
+        }
+
+        fileH.close();
+        qDebug() << "Save RMS Data into: " << patientFolder;
+
+    } else {
+        qDebug() << "Could't Save The RMS Data";
+    }
+
+    if (fileVAR.open(QIODevice::WriteOnly | QIODevice::Text)){
+        QTextStream out(&fileVAR);
+
+        for (int i = 0; i < Datasize; i++){
+            out << VAR1[i] << "\t"
+                << VAR2[i] << "\t"
+                << VAR3[i] << "\t"
+                << VAR4[i] << "\t"
+                << VAR5[i] << "\t"
+                << VAR6[i] << "\t"
+                << VAR7[i] << "\t"
+                << VAR8[i] << "\n";
+        }
+
+        fileH.close();
+        qDebug() << "Save VAR Data into: " << patientFolder;
+
+    } else {
+        qDebug() << "Could't Save The VAR Data";
+    }
+
+    if (filePred.open(QIODevice::WriteOnly | QIODevice::Text)){
+        QTextStream out(&filePred);
+
+        for (int i = 0; i < Datasize; i++){
+            out << Pred1[i] << "\t"
+                << Pred2[i] << "\t"
+                << Pred3[i] << "\t"
+                << Pred4[i] << "\t"
+                << Pred5[i] << "\t"
+                << Pred6[i] << "\t"
+                << Pred7[i] << "\t"
+                << Pred8[i] << "\n";
+        }
+
+        fileH.close();
+        qDebug() << "Save PREDICTION Data into: " << patientFolder;
+
+    } else {
+        qDebug() << "Could't Save The PREDICTION Data";
     }
 
 

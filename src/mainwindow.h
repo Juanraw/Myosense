@@ -5,6 +5,7 @@
 #include <QTimer>
 #include "qcustomplot.h"
 #include "myoread.hpp"
+#include "classifier.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -18,6 +19,7 @@ struct Features{
     QVector<double> mav;
     QVector<double> rms;
     QVector<double> var;
+    QVector<double> pred;
 };
 
 class MainWindow : public QMainWindow
@@ -57,6 +59,7 @@ private:
     QCustomPlot *customplot;
     QTimer *dataTimer;
     MyoRead* myoReader;
+    Classifier* classifier;
 
     QVector<double> Time, emg1, emg2, emg3, emg4, emg5, emg6, emg7, emg8;
     QVector<double> TimeSave, emg1Save, emg2Save, emg3Save, emg4Save, emg5Save, emg6Save, emg7Save, emg8Save;
@@ -66,6 +69,7 @@ private:
     QVector<double> MAV1, MAV2, MAV3, MAV4, MAV5, MAV6, MAV7, MAV8;
     QVector<double> RMS1, RMS2, RMS3, RMS4, RMS5, RMS6, RMS7, RMS8;
     QVector<double> VAR1, VAR2, VAR3, VAR4, VAR5, VAR6, VAR7, VAR8;
+    QVector<double> Pred1, Pred2, Pred3, Pred4, Pred5, Pred6, Pred7, Pred8;
 
     myo::Pose pose;
     bool isUnlock;

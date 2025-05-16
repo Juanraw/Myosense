@@ -20,7 +20,7 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets PrintSupport)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/libs/qcustomplot-source
                     ${CMAKE_CURRENT_SOURCE_DIR}/libs/myosdk/include
-                   #${CMAKE_CURRENT_SOURCE_DIR}/libs/myosdk/lib
+                    #${CMAKE_CURRENT_SOURCE_DIR}/libs/KNN_Data
 )
 
 link_directories(${CMAKE_CURRENT_SOURCE_DIR}/libs/myosdk/lib)
@@ -39,11 +39,15 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
         src/myoread.hpp src/myoread.cpp
+        src/classifier.h
+        src/classifier.cpp
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET Myosense APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
 #                 ${CMAKE_CURRENT_SOURCE_DIR}/android)
 # For more information, see https://doc.qt.io/qt-6/qt-add-executable.html#target-creation
+add_definitions(-DDATAPATH=\"${CMAKE_SOURCE_DIR}/libs/KNN_Data/\")
+
 else()
     if(ANDROID)
         add_library(Myosense SHARED
@@ -55,6 +59,7 @@ else()
         add_executable(Myosense
             ${PROJECT_SOURCES}
         )
+      add_definitions(-DDATAPATH=\"${CMAKE_SOURCE_DIR}/libs/KNN_Data/\")
     endif()
 endif()
 
