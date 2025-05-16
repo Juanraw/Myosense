@@ -828,16 +828,11 @@ border: 1px solid black;
        <string>EMG 8</string>
       </property>
      </widget>
-    </widget>
-    <widget class="QWidget" name="prediction">
-     <attribute name="title">
-      <string>Prediction</string>
-     </attribute>
      <widget class="QPushButton" name="ProcessButton">
       <property name="geometry">
        <rect>
         <x>790</x>
-        <y>400</y>
+        <y>500</y>
         <width>111</width>
         <height>31</height>
        </rect>
