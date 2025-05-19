@@ -17,7 +17,7 @@ This application allows users to:
 ---
 
 ## 📁 Project Structure
-
+```
 MyoSense/
 ├── libs/ # Includes Myo SDK and driver files
 ├── src/ # Main source code and SVM logic
@@ -30,7 +30,7 @@ MyoSense/
 ├── CMakeLists.txt # Build system definition
 ├── README.md # This file
 └── LICENSE
-
+```
 ## ⚙️ Dependencies
 
 The following components are required:
