@@ -51,6 +51,8 @@ private slots:
 
     void on_ProcessButton_clicked();
 
+    void on_ClearButton_clicked();
+
 protected:
     void closeEvent(QCloseEvent *event) override;
 

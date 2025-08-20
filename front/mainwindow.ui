@@ -599,6 +599,22 @@ border: 1px solid black;
        <string>Save</string>
       </property>
      </widget>
+     <widget class="QPushButton" name="ClearButton">
+      <property name="geometry">
+       <rect>
+        <x>847</x>
+        <y>300</y>
+        <width>100</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(85, 85, 127);</string>
+      </property>
+      <property name="text">
+       <string>Clear</string>
+      </property>
+     </widget>
     </widget>
     <widget class="QWidget" name="visualization">
      <attribute name="title">

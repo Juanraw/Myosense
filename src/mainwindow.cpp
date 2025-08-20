@@ -755,3 +755,17 @@ void MainWindow::on_ProcessButton_clicked()
 }
 
 
+
+void MainWindow::on_ClearButton_clicked()
+{
+    emg1Save.clear();
+    emg2Save.clear();
+    emg3Save.clear();
+    emg4Save.clear();
+    emg5Save.clear();
+    emg6Save.clear();
+    emg7Save.clear();
+    emg8Save.clear();
+    TimeSave.clear();
+}
+
